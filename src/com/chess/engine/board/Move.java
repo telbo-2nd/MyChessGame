@@ -386,6 +386,7 @@ public abstract class Move {
         @Override
         public String toString() {
             return "O-O";
+            //ok
         }
 
     }
