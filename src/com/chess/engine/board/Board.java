@@ -18,19 +18,20 @@ public class Board {
     private final WhitePlayer whitePlayer;
     private final BlackPlayer blackPlayer;
     private final Player currentPlayer;
-
+    private final Pawn enPassantPawn;
 
     private Board(final Builder builder) {
         this.gameBoard = creatGameBoard(builder);
         this.whitePieces = calculateActivePieces(this.gameBoard, Alliance.WHITE);
         this.blackPieces = calculateActivePieces(this.gameBoard, Alliance.BLACK);
+        this.enPassantPawn = builder.enPassantPawn;
+
         final Collection<Move> whiteStandardLegalMoves = calculateLegalMoves(this.whitePieces);
         final Collection<Move> blackStandardLegalMoves = calculateLegalMoves(this.blackPieces);
 
         this.whitePlayer = new WhitePlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves);
         this.blackPlayer = new BlackPlayer(this, whiteStandardLegalMoves, blackStandardLegalMoves);
         this.currentPlayer = builder.nextMoveMaker.choosePlayer(this.whitePlayer, this.blackPlayer);
-
     }
 
     @Override
@@ -60,15 +61,17 @@ public class Board {
 
     public Collection<Piece> getBlackPieces() {
         return this.blackPieces;
-
     }
 
     public Collection<Piece> getWhitePieces() {
         return this.whitePieces;
     }
 
-    private Collection<Move> calculateLegalMoves(final Collection<Piece> pieces) {
+    public Pawn getEnPassantPawn() {
+        return this.enPassantPawn;
+    }
 
+    private Collection<Move> calculateLegalMoves(final Collection<Piece> pieces) {
         final List<Move> legalMoves = new ArrayList<>();
         for (final Piece piece : pieces) {
             legalMoves.addAll(piece.calculateLegalMoves(this));
@@ -77,7 +80,7 @@ public class Board {
     }
 
     private static Collection<Piece> calculateActivePieces(final List<Tile> gameBoard, final Alliance alliance) {
-        final List<Piece> activePieces = new ArrayList<Piece>();
+        final List<Piece> activePieces = new ArrayList<>();
         for (final Tile tile : gameBoard) {
             if (tile.isTileOccupied()) {
                 final Piece piece = tile.getPiece();
@@ -137,16 +140,17 @@ public class Board {
         builder.setPiece(new Bishop(Alliance.WHITE, 61));
         builder.setPiece(new Knight(Alliance.WHITE, 62));
         builder.setPiece(new Rook(Alliance.WHITE, 63));
-        //white to move
+        // white to move
         builder.setMoveMaker(Alliance.WHITE);
-        //build the board
         return builder.build();
     }
 
     public Iterable<Move> getAllLegalMoves() {
-        return Iterables.unmodifiableIterable(Iterables.concat(this.whitePlayer.getLegalMoves(), this.blackPlayer.getLegalMoves()));
+        return Iterables.unmodifiableIterable(
+                Iterables.concat(this.whitePlayer.getLegalMoves(), this.blackPlayer.getLegalMoves()));
     }
 
+    // =========================================================================
     public static class Builder {
         Map<Integer, Piece> boardConfig;
         Alliance nextMoveMaker;
@@ -166,14 +170,12 @@ public class Board {
             return this;
         }
 
+        public void setEnPassantPawn(final Pawn enPassantPawn) {
+            this.enPassantPawn = enPassantPawn;
+        }
 
         public Board build() {
             return new Board(this);
         }
-
-        public void setEnPassantPawn(Pawn enPassantPawn) {
-            this.enPassantPawn = enPassantPawn;
-        }
     }
-
 }

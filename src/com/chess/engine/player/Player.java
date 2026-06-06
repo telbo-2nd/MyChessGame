@@ -60,7 +60,6 @@ public abstract class Player {
         return this.legalMoves.contains(move);
     }
 
-    //TODO implement this tomorrow
     public boolean isInCheck() {
         return this.isInCheck;
     }

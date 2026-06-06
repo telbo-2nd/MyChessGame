@@ -12,7 +12,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class Queen extends Piece {
-    private final static int CANDIDATE_MOVE_VECTOR_CANDIDATE[] = {-9, -8, -7, -1, 1, 7, 8, 9};
+    private final static int CANDIDATE_MOVE_VECTOR_CANDIDATE[] = { -9, -8, -7, -1, 1, 7, 8, 9 };
 
     public Queen(final Alliance pieceAlliance, int piecePosition) {
         super(PieceType.QUEEN, piecePosition, pieceAlliance, true);
@@ -31,7 +31,8 @@ public class Queen extends Piece {
             int candidateDestinationCoordinate = this.piecePosition;
             while (BoardUtils.isValidTileCoordinate(candidateDestinationCoordinate)) {
 
-                if (isFirstColumnExclusion(candidateDestinationCoordinate, candidateCoordinatesOffset) || isEighthColumnExclusion(candidateDestinationCoordinate, candidateCoordinatesOffset)) {
+                if (isFirstColumnExclusion(candidateDestinationCoordinate, candidateCoordinatesOffset)
+                        || isEighthColumnExclusion(candidateDestinationCoordinate, candidateCoordinatesOffset)) {
                     break;
                 }
                 candidateDestinationCoordinate += candidateCoordinatesOffset;
@@ -44,9 +45,10 @@ public class Queen extends Piece {
                         final Piece pieceAtDestination = candidateDestinationTile.getPiece();
                         final Alliance pieceAlliance = pieceAtDestination.getPieceAlliance();
                         if (this.pieceAlliance != pieceAlliance) {
-                            legalMoves.add(new Move.AttackMove(board, this, candidateDestinationCoordinate, pieceAtDestination));
+                            legalMoves.add(new Move.AttackMove(board, this, candidateDestinationCoordinate,
+                                    pieceAtDestination));
                         }
-                        break;//if there is any piece in the way break no more candidate moves in the way
+                        break;
 
                     }
 
@@ -70,10 +72,12 @@ public class Queen extends Piece {
     }
 
     private static boolean isFirstColumnExclusion(final int currentPosition, final int candidateOffset) {
-        return BoardUtils.FIRST_COLUMN[currentPosition] && (candidateOffset == -1 || candidateOffset == -9 || candidateOffset == 7);
+        return BoardUtils.FIRST_COLUMN[currentPosition]
+                && (candidateOffset == -1 || candidateOffset == -9 || candidateOffset == 7);
     }
 
     private static boolean isEighthColumnExclusion(final int currentPosition, final int candidateOffset) {
-        return BoardUtils.EIGHTH_COLUMN[currentPosition] && (candidateOffset == -7 || candidateOffset == 1 || candidateOffset == 9);
+        return BoardUtils.EIGHTH_COLUMN[currentPosition]
+                && (candidateOffset == -7 || candidateOffset == 1 || candidateOffset == 9);
     }
 }

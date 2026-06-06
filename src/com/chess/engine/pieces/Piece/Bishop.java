@@ -6,7 +6,6 @@ import com.chess.engine.board.BoardUtils;
 import com.chess.engine.board.Move;
 import com.chess.engine.board.Tile;
 import com.google.common.collect.ImmutableList;
-import com.google.errorprone.annotations.Immutable;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,7 +14,7 @@ import java.util.List;
 import static com.chess.engine.board.Move.*;
 
 public class Bishop extends Piece {
-    private final static int CANDIDATE_MOVE_VECTOR_CANDIDATE[] = {-9, -7, 7, 9};
+    private final static int CANDIDATE_MOVE_VECTOR_CANDIDATE[] = { -9, -7, 7, 9 };
 
     public Bishop(Alliance pieceAlliance, int piecePosition) {
         super(PieceType.BISHOP, piecePosition, pieceAlliance, true);
@@ -34,7 +33,8 @@ public class Bishop extends Piece {
             int candidateDestinationCoordinate = this.piecePosition;
             while (BoardUtils.isValidTileCoordinate(candidateDestinationCoordinate)) {
 
-                if (isFirstColumnExclusion(candidateDestinationCoordinate, candidateCoordinatesOffset) || isEighthColumnExclusion(candidateDestinationCoordinate, candidateCoordinatesOffset)) {
+                if (isFirstColumnExclusion(candidateDestinationCoordinate, candidateCoordinatesOffset)
+                        || isEighthColumnExclusion(candidateDestinationCoordinate, candidateCoordinatesOffset)) {
                     break;
                 }
                 candidateDestinationCoordinate += candidateCoordinatesOffset;
@@ -47,9 +47,10 @@ public class Bishop extends Piece {
                         final Piece pieceAtDestination = candidateDestinationTile.getPiece();
                         final Alliance pieceAlliance = pieceAtDestination.getPieceAlliance();
                         if (this.pieceAlliance != pieceAlliance) {
-                            legalMoves.add(new AttackMove(board, this, candidateDestinationCoordinate, pieceAtDestination));
+                            legalMoves.add(
+                                    new AttackMove(board, this, candidateDestinationCoordinate, pieceAtDestination));
                         }
-                        break;//if there is any piece in the way break no more candidate moves in the way
+                        break;
 
                     }
 

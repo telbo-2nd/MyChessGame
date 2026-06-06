@@ -4,26 +4,35 @@ import com.chess.engine.board.Board;
 import com.chess.engine.board.Move;
 
 import javax.swing.*;
-import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-
-import static com.chess.gui.Table.*;
+import static com.chess.gui.Table.MoveLog;
 
 public class GameHistoryPanel extends JPanel {
     private final DataModel model;
     private final JScrollPane scrollPane;
-    private static final Dimension HISTORY_PANEL_DIMENSION = new Dimension(100, 400);
+    private static final Dimension HISTORY_PANEL_DIMENSION = new Dimension(150, 400);
 
     GameHistoryPanel() {
         this.setLayout(new BorderLayout());
         this.model = new DataModel();
         final JTable table = new JTable(model);
-        table.setRowHeight(15);
+        table.setRowHeight(25);
+        table.setBackground(Color.decode("#262522"));
+        table.setForeground(Color.WHITE);
+        table.setGridColor(Color.decode("#3e3d3a"));
+        table.setFont(new Font("SansSerif", Font.PLAIN, 12));
+        table.setSelectionBackground(Color.decode("#4a4945"));
+        table.getTableHeader().setBackground(Color.decode("#1e1e24"));
+        table.getTableHeader().setForeground(Color.WHITE);
+        table.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 12));
+
         this.scrollPane = new JScrollPane(table);
+        scrollPane.getViewport().setBackground(Color.decode("#262522"));
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
         scrollPane.setColumnHeaderView(table.getTableHeader());
         scrollPane.setPreferredSize(HISTORY_PANEL_DIMENSION);
         this.add(scrollPane, BorderLayout.CENTER);
@@ -31,7 +40,6 @@ public class GameHistoryPanel extends JPanel {
     }
 
     void redo(final Board board, final MoveLog moveHistory) {
-
         int currentRow = 0;
         this.model.clear();
         for (final Move move : moveHistory.getMoves()) {
@@ -124,17 +132,14 @@ public class GameHistoryPanel extends JPanel {
 
         @Override
         public Class<?> getColumnClass(final int column) {
-            return Move.class;
+            return String.class;
         }
 
         @Override
         public String getColumnName(final int column) {
             return NAMES[column];
         }
-
-
     }
-
 
     private static class Row {
         private String whiteMove;

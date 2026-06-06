@@ -12,10 +12,9 @@ import java.util.Collection;
 import java.util.List;
 
 public class Rook extends Piece {
-    private final static int CANDIDATE_MOVE_VECTOR_CANDIDATE[] = {-8, -1, 1, 8};
+    private final static int[] CANDIDATE_MOVE_VECTOR_CANDIDATE = { -8, -1, 1, 8 };
 
-
-    public Rook(Alliance pieceAlliance, int piecePosition) {
+    public Rook(final Alliance pieceAlliance, final int piecePosition) {
         super(PieceType.ROOK, piecePosition, pieceAlliance, true);
     }
 
@@ -24,15 +23,15 @@ public class Rook extends Piece {
     }
 
     @Override
-    public Collection<Move> calculateLegalMoves(Board board) {
-
+    public Collection<Move> calculateLegalMoves(final Board board) {
         final List<Move> legalMoves = new ArrayList<>();
+
         for (final int candidateCoordinatesOffset : CANDIDATE_MOVE_VECTOR_CANDIDATE) {
-
             int candidateDestinationCoordinate = this.piecePosition;
-            while (BoardUtils.isValidTileCoordinate(candidateDestinationCoordinate)) {
 
-                if (isFirstColumnExclusion(candidateDestinationCoordinate, candidateCoordinatesOffset) || isEighthColumnExclusion(candidateDestinationCoordinate, candidateCoordinatesOffset)) {
+            while (BoardUtils.isValidTileCoordinate(candidateDestinationCoordinate)) {
+                if (isFirstColumnExclusion(candidateDestinationCoordinate, candidateCoordinatesOffset) ||
+                        isEighthColumnExclusion(candidateDestinationCoordinate, candidateCoordinatesOffset)) {
                     break;
                 }
                 candidateDestinationCoordinate += candidateCoordinatesOffset;
@@ -41,28 +40,23 @@ public class Rook extends Piece {
                     if (!candidateDestinationTile.isTileOccupied()) {
                         legalMoves.add(new Move.MajorMove(board, this, candidateDestinationCoordinate));
                     } else {
-
                         final Piece pieceAtDestination = candidateDestinationTile.getPiece();
                         final Alliance pieceAlliance = pieceAtDestination.getPieceAlliance();
                         if (this.pieceAlliance != pieceAlliance) {
-                            legalMoves.add(new Move.AttackMove(board, this, candidateDestinationCoordinate, pieceAtDestination));
+                            legalMoves.add(new Move.AttackMove(board, this,
+                                    candidateDestinationCoordinate, pieceAtDestination));
                         }
-                        break;//if there is any piece in the way break no more candidate moves in the way
-
+                        break;
                     }
-
                 }
-
             }
         }
-
         return ImmutableList.copyOf(legalMoves);
-
     }
 
     @Override
     public Rook movePiece(final Move move) {
-        return new Rook(move.getMovedPiece().getPieceAlliance(), move.getDestinationCoordinate());
+        return new Rook(move.getMovedPiece().getPieceAlliance(), move.getDestinationCoordinate(), false);
     }
 
     @Override
@@ -75,6 +69,6 @@ public class Rook extends Piece {
     }
 
     private static boolean isEighthColumnExclusion(final int currentPosition, final int candidateOffset) {
-        return BoardUtils.EIGHTH_COLUMN[currentPosition] && (candidateOffset == -1);
+        return BoardUtils.EIGHTH_COLUMN[currentPosition] && (candidateOffset == 1);
     }
 }
