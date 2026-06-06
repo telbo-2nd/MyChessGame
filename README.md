@@ -182,10 +182,6 @@ Declared in [`pom.xml`](pom.xml) and managed automatically by Maven.
 
 ## 👤 Author
 
-**Telboz** — built with ☕ Java and a love for chess.
+**Telboz** — built with Java and a my love for chess.
 
 ---
-
-## 📄 License
-
-This project is open source. Feel free to fork, learn from it, and build upon it.
